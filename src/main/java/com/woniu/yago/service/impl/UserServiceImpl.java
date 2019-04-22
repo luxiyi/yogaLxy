@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserMapper mapper;
+    private UserMapper userMapper;
 
 
     @Transactional
     @Override
     public User saveUser(User user) {
-        return mapper.saveUser(user);
+        return userMapper.saveUser(user);
     }
 
 
@@ -40,15 +40,15 @@ public class UserServiceImpl implements UserService {
      * @date        2019/4/17 17:03
      */
     @Override
-    public boolean regByEmail(User user) {
-
-        String userPwd= CodeUtil.userNumber();
-        user.setUserPwd(userPwd);
-        if(mapper.saveUser(user).getUserEmail() != null
-                && mapper.saveUser(user).getUserPwd()!=null
-                    && mapper.saveUser(user).getUserVerifyCode()!=null){
-            if(mapper.activeUserByEamil(user.getUserEmail())>0){
-                new Thread(new MailUtil(user.getUserEmail(), userPwd)).start();
+    public boolean sendRegEmailCode(User user) {
+        String userVerifyCode= CodeUtil.userNumber();
+        user.setUserVerifyCode(userVerifyCode);
+        String content = "<html><head></head><body><h1>这是一封绝密邮件,不要随便将内容透露给别人。" +
+                "</h1><br><h3>您本次注册的所需验证码为：" + user.getUserVerifyCode() + "。请尽快注册，验证码有效时间为3分钟，超出时间范围内，需重新获取。</h3></body></html>";
+        if(userMapper.saveUser(user).getUserEmail() != null
+                    && userMapper.saveUser(user).getUserVerifyCode()!=null){
+            if(userMapper.activeUserByEamil(user.getUserEmail())>0){
+                new Thread(new MailUtil(user.getUserEmail(), userVerifyCode,content)).start();
                 return true;
             }else {
                 return false;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean activeUserByPhone(String userPhone) {
-        if(mapper.activeUserByPhone(userPhone)>0){
+        if(userMapper.activeUserByPhone(userPhone)>0){
             return true;
         }else{
             return false;
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean activeUserByEmail(String userEmail) {
-        if(mapper.activeUserByEamil(userEmail)>0){
+        if(userMapper.activeUserByEamil(userEmail)>0){
             return true;
         }else{
             return false;
@@ -94,22 +94,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User queryUserByEmail(String userEmail) {
-        return mapper.queryUserByEmail(userEmail);
+        return userMapper.queryUserByEmail(userEmail);
     }
 
     @Override
-    public User loginUserByEmailAndPwd(String userEmail,String userPwd) {
-        return mapper.queryUserByEmailAndPwd(userEmail,userPwd);
+    public User queryUserByEmailAndPwd(String userEmail,String userPwd) {
+        return userMapper.queryUserByEmailAndPwd(userEmail,userPwd);
     }
 
     @Override
-    public User regUserByEmailAndCode(String userEmail, String userVerifyCode) {
-        return mapper.queryUserByEmailAndCode(userEmail,userVerifyCode);
+    public User queryUserByEmailAndCode(String userEmail, String userVerifyCode) {
+        return userMapper.queryUserByEmailAndCode(userEmail,userVerifyCode);
     }
 
     @Override
     public User queryUserByPhone(String userPhone) {
-        return mapper.queryUserByPhone(userPhone);
+        return userMapper.queryUserByPhone(userPhone);
     }
     /**
      * 方法实现说明  注册手机时发送密码，
@@ -121,12 +121,12 @@ public class UserServiceImpl implements UserService {
      * @date        2019/4/21 1:53
      */
     @Override
-    public boolean sendRegPwd(User user) {
+    public boolean sendRegPhonePwd(User user) {
 
         String userPwd= CodeUtil.userNumber();
         user.setUserPwd(userPwd);
 
-        if(!mapper.saveUser(user).getUserPhone().equals("") && !mapper.saveUser(user).getUserPwd().equals("")){
+        if(!userMapper.saveUser(user).getUserPhone().equals("") && !userMapper.saveUser(user).getUserPwd().equals("")){
             new PhoneUtil().sendPwd(user.getUserPhone(),userPwd);
             return true;
         }else {
@@ -135,8 +135,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User regUserByPhoneAndPwd(String userPhone, String userPwd) {
-        return mapper.regUserByPhoneAndPwd(userPhone,userPwd);
+    public User queryUserByPhoneAndPwd(String userPhone, String userPwd) {
+        return userMapper.queryUserByPhoneAndPwd(userPhone,userPwd);
     }
     /**
      * 方法实现说明 登录时，发送验证码，1、查找手机号，无论手机号是否存在，不更新状态
@@ -158,8 +158,8 @@ public class UserServiceImpl implements UserService {
         }
         String userVerifyCode= CodeUtil.userNumber();
         user.setUserVerifyCode(userVerifyCode);
-        if (mapper.queryUserByPhone(user.getUserPhone())!=null){
-            if (mapper.updateCode(userVerifyCode,user.getUserPhone())>0){
+        if (userMapper.queryUserByPhone(user.getUserPhone())!=null){
+            if (userMapper.updateCode(userVerifyCode,user.getUserPhone())>0){
                 new PhoneUtil().sendCode(user.getUserPhone(),userVerifyCode);
                 return true;
             }else {
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
 
             }
         }else {
-            if (!mapper.saveUser(user).getUserPhone().equals("") && !mapper.saveUser(user).getUserVerifyCode().equals("")){
+            if (!userMapper.saveUser(user).getUserPhone().equals("") && !userMapper.saveUser(user).getUserVerifyCode().equals("")){
                     new PhoneUtil().sendCode(user.getUserPhone(),userVerifyCode);
                     return true;
                 }else {
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loginByPhoneAndCode(String userPhone, String userVerifyCode) {
-        return mapper.loginByPhoneAndCode(userPhone,userVerifyCode);
+    public User queryUserByPhoneAndCode(String userPhone, String userVerifyCode) {
+        return userMapper.queryUserByPhoneAndCode(userPhone,userVerifyCode);
     }
 }

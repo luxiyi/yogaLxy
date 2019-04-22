@@ -9,11 +9,13 @@ import java.util.Properties;
 
 public class MailUtil implements Runnable {
 	private String userEmail;// 收件人邮箱
-	private String userVerifyCode;// 验证码
+	private String userNumber;// 验证码
+	private String content;//正文内容
 
-	public MailUtil(String userEmail, String userVerifyCode) {
+	public MailUtil(String userEmail, String userNumber, String content) {
 		this.userEmail = userEmail;
-		this.userVerifyCode = userVerifyCode;
+		this.userNumber = userNumber;
+		this.content = content;
 	}
 
 	public void run() {
@@ -46,8 +48,7 @@ public class MailUtil implements Runnable {
 			// 2.3设置邮件主题
 			message.setSubject("账号激活");
 			// 2.4设置邮件内容
-			String content = "<html><head></head><body><h1>这是一封绝密邮件,请牢记密码,不要随便透露验证码给别人。" +
-					"</h1><br><h3>您本次注册的所需验证码为：" + userVerifyCode + "。请尽快注册，验证码有效时间为3分钟，超出时间范围内，需重新获取。</h3></body></html>";
+
 			message.setContent(content, "text/html;charset=UTF-8");
 			// 3.发送邮件
 			Transport.send(message);

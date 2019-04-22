@@ -5,7 +5,7 @@ import com.woniu.yago.service.UserService;
 import com.woniu.yago.utils.MailUtil;
 import com.woniu.yago.utils.PhoneUtil;
 import com.woniu.yago.utils.RegexpUtil;
-import com.woniu.yago.utils.ResultInfo;
+import com.woniu.yago.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,28 +39,27 @@ public class UserController {
      * @exception
      * @date        2019/4/17 16:26
      */
-    @RequestMapping(value = "/sendRegEmailPwd")
+    @RequestMapping(value = "/sendRegEmailCode")
     @ResponseBody
-    public String sendRegEmailPwd(String userEmail,User user){
+    public String sendRegEmailCode(String userEmail,User user){
         if(userEmail.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
         if(!user.getUserEmail().matches(RegexpUtil.RegExp_Mail)) {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("邮箱格式不匹配").getMessage();
         }
         if (userService.queryUserByEmail(userEmail)!=null){
-            return ResultInfo.EXIST_INFO;
+            return ResultUtil.errorOperation("已存在").getMessage();
         }
         user.setUserEmail(userEmail);
-        if (userService.regByEmail(user)){
-            return ResultInfo.SUCCESS_INFO;
+        if (userService.sendRegEmailCode(user)){
+            return ResultUtil.actionSuccess("前往邮箱获取密码",user).getMessage();
         }else {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.connectDatabaseFail().getMessage();
         }
     }
     /**
      * 方法实现说明 注册邮箱，从邮箱中获取验证码，输入密码，验证密码和邮箱、验证码，
-     *
      * @author      lxy
      * @Param:      userVerifyCode，userPhone,activa
      * @return      json String "0","1","3"
@@ -71,21 +70,25 @@ public class UserController {
     @ResponseBody
     public String regByEmail(String userEmail,String userPwd,String userVerifyCode,User user,HttpSession session){
         if (userPwd.equals("") || userEmail.equals("") || userVerifyCode.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
-        if(!user.getUserEmail().matches(RegexpUtil.RegExp_Mail)) {
-            return ResultInfo.FAIL_INFO;
+        if(!userEmail.matches(RegexpUtil.RegExp_Mail)) {
+            return ResultUtil.errorOperation("邮箱格式不匹配").getMessage();
         }
-        user=userService.regUserByEmailAndCode(userEmail,userVerifyCode);
+        if (!userPwd.matches(RegexpUtil.RegExp_PASS)){
+            return ResultUtil.errorOperation("密码格式不匹配").getMessage();
+        }
+        user=userService.queryUserByEmailAndCode(userEmail,userVerifyCode);
         if (user!=null){
-            if (userService.activeUserByEmail(userEmail)){
-                session.setAttribute("user",user);
-                return ResultInfo.SUCCESS_INFO;
-            }else {
-                return ResultInfo.FAIL_INFO;
-            }
+                user.setUserPwd(userPwd);
+                if (userService.activeUserByEmail(userEmail)){
+                    session.setAttribute("user",user);
+                    return ResultUtil.actionSuccess("注册成功",user).getMessage();
+                }else {
+                    return ResultUtil.errorOperation("注册失败").getMessage();
+                }
         }else {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("已存在").getMessage();
         }
     }
 
@@ -101,22 +104,21 @@ public class UserController {
     @ResponseBody
     public String loginByEmailAndPwd(String userEmail, String userPwd, User user, HttpSession session){
         if (userEmail.equals("") || userPwd.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
-        user= userService.loginUserByEmailAndPwd(userEmail,userPwd);
-        System.out.println(user);
+        user= userService.queryUserByEmailAndPwd(userEmail,userPwd);
         if (user!=null){
             session.setAttribute("user",user);
-            return ResultInfo.SUCCESS_INFO;
+            return ResultUtil.actionSuccess("登录成功",user).getMessage();
         }else {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("登录失败").getMessage();
         }
     }
     /**
-     * 方法实现说明
+     * 方法实现说明  邮箱找回密码，通过用户名发送邮件找回密码
      * @author      lxy
-     * @Param:
-     * @return
+     * @Param:      userEmail，userPwd
+     * @return      String json
      * @exception
      * @date        2019/4/21 3:32
      */
@@ -124,17 +126,19 @@ public class UserController {
     @ResponseBody
     public String getOldEmailPwd(String userEmail,User user){
         if(userEmail.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
         if(!user.getUserEmail().matches(RegexpUtil.RegExp_Mail)) {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("邮箱格式不匹配").getMessage();
         }
         user=userService.queryUserByEmail(userEmail);
+        String content = "<html><head></head><body><h1>这是一封绝密邮件,不要随便将内容透露给别人。" +
+                "</h1><br><h3>您的原密码为：" + user.getUserPwd() + "。</h3></body></html>";
         if (user!=null){
-            new Thread(new MailUtil(user.getUserEmail(), user.getUserPwd())).start();
-            return ResultInfo.SUCCESS_INFO;
+                new Thread(new MailUtil(userEmail,user.getUserPwd(),content)).start();
+            return ResultUtil.actionSuccess("前往邮箱获取密码",user).getMessage();
         }else {
-            return ResultInfo.EXIST_INFO;
+            return ResultUtil.errorOperation("邮箱不存在").getMessage();
         }
 
     }
@@ -155,18 +159,18 @@ public class UserController {
     @ResponseBody
     public String sendRegPhonePwd(User user) {
         if(user.getUserPhone().equals("") || user==null){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
         if(!user.getUserPhone().matches(RegexpUtil.RegExp_PHONE)) {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("手机格式不匹配").getMessage();
         }
         if (userService.queryUserByPhone(user.getUserPhone())!=null){
-            return ResultInfo.EXIST_INFO;
+            return ResultUtil.errorOperation("手机号已存在").getMessage();
         }
-       if(userService.sendRegPwd(user)){
-           return ResultInfo.SUCCESS_INFO;
+       if(userService.sendRegPhonePwd(user)){
+            return ResultUtil.actionSuccess("请在手机上查收密码",user).getMessage();
        }else {
-           return ResultInfo.FAIL_INFO;
+           return ResultUtil.connectDatabaseFail().getMessage();
        }
     }
     /**
@@ -182,18 +186,21 @@ public class UserController {
     @ResponseBody
     public String regByPhone(String userPhone,String userPwd,User user,HttpSession session){
         if (userPwd.equals("") || userPhone.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
-        if (userService.regUserByPhoneAndPwd(userPhone,userPwd)!=null){
+        if(!userPhone.matches(RegexpUtil.RegExp_PHONE)) {
+            return ResultUtil.errorOperation("手机格式不匹配").getMessage();
+        }
+        user=userService.queryUserByPhoneAndPwd(userPhone,userPwd);
+        if (user!=null){
             if (userService.activeUserByPhone(userPhone)){
-                user=userService.regUserByPhoneAndPwd(userPhone,userPwd);
                 session.setAttribute("user",user);
-                return ResultInfo.SUCCESS_INFO;
+                return ResultUtil.actionSuccess("注册成功",user).getMessage();
             }else {
-                return ResultInfo.FAIL_INFO;
+                return ResultUtil.errorOperation("注册失败").getMessage();
             }
         }else {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("已存在").getMessage();
         }
     }
     /**
@@ -208,13 +215,15 @@ public class UserController {
     @ResponseBody
     public String sendLoginPhonePwd(User user){
         if(user.getUserPhone().equals("") || user==null){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
-
+        if(!user.getUserPhone().matches(RegexpUtil.RegExp_PHONE)) {
+            return ResultUtil.errorOperation("手机格式不匹配").getMessage();
+        }
         if(userService.sendLoginMessage(user)){
-            return ResultInfo.SUCCESS_INFO;
+            return ResultUtil.actionSuccess("请在手机上查收验证码",user).getMessage();
         }else {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.connectDatabaseFail().getMessage();
         }
     }
 
@@ -233,20 +242,21 @@ public class UserController {
     @ResponseBody
     public String loginByPhoneAndCode(String userPhone,String userVerifyCode,User user,HttpSession session){
         if (userVerifyCode.equals("") || userPhone.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
-        if (userService.loginByPhoneAndCode(userPhone,userVerifyCode)!=null){
+        if(!user.getUserPhone().matches(RegexpUtil.RegExp_PHONE)) {
+            return ResultUtil.errorOperation("手机格式不匹配").getMessage();
+        }
+        user=userService.queryUserByPhoneAndCode(userPhone,userVerifyCode);
+        if (user!=null){
             if (userService.activeUserByPhone(userPhone)){
-                user=userService.loginByPhoneAndCode(userPhone,userVerifyCode);
                 session.setAttribute("user",user);
-                return ResultInfo.SUCCESS_INFO;
+                return ResultUtil.actionSuccess("登录成功",user).getMessage();
             }else {
-                System.out.println("ssssss");
-                return ResultInfo.FAIL_INFO;
+                return ResultUtil.connectDatabaseFail().getMessage();
             }
         }else {
-            System.out.println("sdddddddddddddddddddds");
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("手机号不存在").getMessage();
         }
     }
 
@@ -263,17 +273,17 @@ public class UserController {
     @ResponseBody
     public String getOldPhonePwd(String userPhone,User user){
         if(userPhone.equals("")){
-            return ResultInfo.NULL_INFO;
+            return ResultUtil.errorOperation("不能为空").getMessage();
         }
         if(!user.getUserPhone().matches(RegexpUtil.RegExp_PHONE)) {
-            return ResultInfo.FAIL_INFO;
+            return ResultUtil.errorOperation("手机格式不匹配").getMessage();
         }
         user=userService.queryUserByPhone(userPhone);
         if (user!=null){
             new PhoneUtil().sendCode(user.getUserPhone(),user.getUserPwd());
-            return ResultInfo.SUCCESS_INFO;
+            return ResultUtil.actionSuccess("请在手机上查收密码",user).getMessage();
         }else {
-            return ResultInfo.EXIST_INFO;
+            return ResultUtil.errorOperation("手机号不存在").getMessage();
         }
 
     }

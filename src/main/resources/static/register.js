@@ -1,21 +1,23 @@
 //发送邮箱密码
-function sendRegEmailPwd() {
+function sendRegEmailCode() {
     $.ajax({
-        url:"user/sendRegEmailPwd",
+        url:"user/sendRegEmailCode",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
         },
         success:function (data) {
-            if (data=="0"){
-                alert("前往邮箱获取密码");
+            if (data=="前往邮箱获取密码"){
+                alert(data);
                window.location.href="./regByEmail.html";
-            }else if(data=="1"){
-                alert("为空");
-            }else if(data=="2"){
-                alert("已存在");
+            }else if(data=="不能为空"){
+                alert(data);
+            }else if(data=="邮箱格式不匹配"){
+                alert(data);
+            }else if(data=="已存在"){
+                alert(data);
             }else {
-                alert("失败");
+                alert(data);
             }
         }
     });
@@ -28,18 +30,23 @@ function regByEmail() {
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
+            "userVerifyCode":$("#userVerifyCode").val(),
             "userPwd":$("#userPwd").val()
         },
         success:function (data) {
-            if (data=="0"){
-                alert("成功");
+            if (data=="注册成功"){
+                alert(data);
                 window.location.href="./index.html";
-            }else if(data=="1"){
-                alert("为空");
-            }else if(data=="2"){
-                alert("已存在");
+            }else if(data=="不能为空"){
+                alert(data);
+            }else if(data=="邮箱格式不匹配"){
+                alert(data);
+            }else if(data=="密码格式不匹配"){
+                alert(data);
+            }else if(data=="注册失败"){
+                alert(data);
             }else {
-                alert("失败");
+                alert(data);
             }
         }
     });
@@ -54,13 +61,13 @@ function loginByEmailAndPwd() {
             "userPwd":$("#userPwd").val()
         },
         success:function (data) {
-            if (data=="0"){
-                alert("成功");
+            if (data=="登录成功"){
+                alert(data);
                 window.location.href="./index.html";
-            }else if(data=="1"){
-                alert("为空");
+            }else if(data=="不能为空"){
+                alert(data);
             }else {
-                alert("失败");
+                alert(data);
                 window.location.reload();
             }
         }
@@ -75,15 +82,13 @@ function getOldEmailPwd() {
             "userEmail":$("#userEmail").val(),
         },
         success:function (data) {
-            if (data=="0"){
-                alert("前往邮箱获取密码");
+            if (data=="前往邮箱获取密码"){
+                alert(data);
                 window.location.href="./login.html";
-            }else if(data=="1"){
-                alert("为空");
-            }else if(data=="2"){
-                alert("不存在");
-            }else {
-                alert("失败");
+            }else if(data=="不能为空"){
+                alert(data);
+            }else{
+                alert(data);
             }
         }
     });
@@ -101,14 +106,14 @@ function sendRegPhonePwd() {
             "userPhone":$("#userPhone").val(),
         },
         success:function (data) {
-            if (data=="0"){
-                alert("请查收密码");
-            }else if(data=="1"){
-                alert("为空")
-            } else if(data=="2"){
-                alert("已存在")
+            if (data=="请在手机上查收密码"){
+                alert(data);
+            }else if(data=="不能为空"){
+                alert(data)
+            } else if(data=="手机号已存在"){
+                alert(data)
             } else {
-                alert("发送失败");
+                alert(data);
             }
         }
     });
@@ -123,15 +128,17 @@ function regByPhone() {
             "userPwd":$("#userPwd").val()
         },
         success:function (data) {
-            if (data=="0"){
-                alert("成功");
+            if (data=="注册成功"){
+                alert(data);
                 window.location.href="./index.html";
-            }else if(data=="1"){
-                alert("为空");
-            }else if(data=="2"){
-                alert("已存在");
+            }else if(data=="不能为空"){
+                alert(data);
+            }else if(data=="已存在"){
+                alert(data);
+            }else if(data=="手机格式不匹配"){
+                alert(data);
             }else {
-                alert("失败");
+                alert("注册失败");
             }
         }
     });
@@ -145,21 +152,20 @@ function sendLoginPhonePwd() {
             "userPhone":$("#userPhone").val(),
         },
         success:function (data) {
-            if (data=="0"){
-                alert("请查收验证码");
-            }else if(data=="1"){
-                alert("为空")
-            } else if(data=="2"){
-                alert("已存在")
+            if (data=="请在手机上查收验证码"){
+                alert(data);
+            }else if(data=="手机格式不匹配"){
+                alert(data);
+            } else if(data=="手机号不存在"){
+                alert(data);
             } else {
-                alert("发送失败");
+                alert(data);
             }
         }
     });
 }
 //登录手机
 function loginByPhoneAndCode() {
-
     $.ajax({
         url:"user/loginByPhoneAndCode",
         type:"post",
@@ -168,15 +174,17 @@ function loginByPhoneAndCode() {
             "userVerifyCode":$("#userVerifyCode").val()
         },
         success:function (data) {
-            if (data=="0"){
-                alert("成功");
+            if (data=="登录成功"){
+                alert(data);
                 window.location.href="./index.html";
-            }else if(data=="1"){
-                alert("为空");
-            }else if(data=="2"){
-                alert("已存在");
+            }else if(data=="不能为空"){
+                alert(data);
+            }else if(data=="手机格式不匹配"){
+                alert(data);
+            }else if(data=="手机号不存在"){
+                alert(data);
             }else {
-                alert("失败");
+                alert(data);
             }
         }
     });
@@ -190,15 +198,15 @@ function  getOldPhonePwd() {
             "userPhone":$("#userPhone").val(),
         },
         success:function (data) {
-            if (data=="0"){
-                alert("请查收密码");
+            if (data=="请在手机上查收密码"){
+                alert(data);
                 window.location.href="./login.html";
-            }else if(data=="1"){
-                alert("为空")
-            } else if(data=="2"){
-                alert("不存在")
+            }else if(data=="不能为空"){
+                alert(data);
+            } else if(data=="手机号不存在"){
+                alert(data);
             } else {
-                alert("发送失败");
+                alert(data);
             }
         }
     });

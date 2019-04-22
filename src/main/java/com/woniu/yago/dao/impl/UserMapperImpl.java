@@ -48,14 +48,13 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public User regUserByPhoneAndPwd(String userPhone, String userPwd) {
-        return repository.regUserByPhoneAndPwd(userPhone,userPwd);
+    public User queryUserByPhoneAndPwd(String userPhone, String userPwd) {
+        return repository.queryUserByPhoneAndPwd(userPhone,userPwd);
     }
 
     @Override
-    public User loginByPhoneAndCode(String userPhone, String userVerifyCode) {
-
-        return repository.loginByPhoneAndCode(userPhone,userVerifyCode);
+    public User queryUserByPhoneAndCode(String userPhone, String userVerifyCode) {
+        return repository.queryUserByPhoneAndCode(userPhone,userVerifyCode);
     }
 
     @Override
@@ -65,8 +64,10 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public User queryUserByEmailAndCode(String userEmail, String userVerifyCode) {
-        return repository.regUserByEmailAndCode(userEmail,userVerifyCode);
+        return repository.queryUserByEmailAndCode(userEmail,userVerifyCode);
     }
+
+
 
 //    @Override
 //    public User find(String userPhone,Integer active) {

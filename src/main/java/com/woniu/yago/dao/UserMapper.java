@@ -21,9 +21,9 @@ public interface UserMapper {
 
     User queryUserByPhone(String userPhone);
 
-    User regUserByPhoneAndPwd(String userPhone, String userPwd);
+    User queryUserByPhoneAndPwd(String userPhone, String userPwd);
 
-    User loginByPhoneAndCode(String userPhone, String userVerifyCode);
+    User queryUserByPhoneAndCode(String userPhone, String userVerifyCode);
 
     Integer updateCode(String userVerifyCode,String userPhone);
 

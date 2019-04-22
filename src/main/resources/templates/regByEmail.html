@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+    邮箱：<input type="email" id="userEmail"><button onclick="sendRegEmailPwd()">获取验证码</button><br>
+    密码：<input type="password" id="userPwd"> <br>
+    验证码：<input type="text" id="userVerifyCode"><br>
+    <button onclick="regByEmail()">注册</button>
+
+</body>
+<script th:src="@{/register.js}" ></script>
+</html>

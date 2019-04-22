@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+    手机号：<input type="tel" id="userPhone"><button onclick="sendRegPhonePwd()">获取密码</button><br>
+    密码：<input type="text" id="userPwd"><br>
+    <button onclick="regByPhone()">注册</button>
+
+
+
+</body>
+<script th:src="@{/register.js}" ></script>
+</html>

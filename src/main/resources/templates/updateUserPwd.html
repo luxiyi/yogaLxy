@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+
+    设置密码：<input type="password" id="userPwd"><br>
+    确认密码：<input type="password" id="confirmPwd"><br>
+    <button onclick=" updateUserPwdByEmail()">邮箱重置密码</button><br>
+
+    设置密码：<input type="password" id="userPwdPhone"><br>
+    确认密码：<input type="password" id="confirmPwdPhone"><br>
+    <button onclick=" updateUserPwdByPhone()">手机重置密码</button>
+
+
+</body>
+<script th:src="@{/register.js}" ></script>
+</html>

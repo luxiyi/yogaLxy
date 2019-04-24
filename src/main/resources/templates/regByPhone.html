@@ -8,7 +8,12 @@
 <body>
     手机号：<input type="tel" id="userPhone"><button onclick="sendRegPhonePwd()">获取密码</button><br>
     密码：<input type="text" id="userPwd"><br>
+    职业选择：<input name="roleId" type="radio" value="1" checked="checked"/>学生
+                <input name="roleId" type="radio" value="2"/>教练<br>
     <button onclick="regByPhone()">注册</button>
+    <!--1、$('input:radio:checked').val()；-->
+    <!--2、$("input[type='radio']:checked").val();-->
+    <!--3、$("input[name='rd']:checked").val();-->
 
 
 

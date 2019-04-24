@@ -19,8 +19,8 @@ import javax.persistence.*;
 @Proxy(lazy = false)
 @Table(name = "user")
 public class User {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @GeneratedValue
     private Integer userId;
     @Column(name = "user_pwd")
     private String userPwd;

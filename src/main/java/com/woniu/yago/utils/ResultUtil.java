@@ -26,7 +26,7 @@ public class ResultUtil {
         return new Result(1, message, data);
     }
     //    非法操作
-    public static Result illegalOperation(){
+    public static Result illegalOperation(String message){
         return new Result(0, "操作非法，请联系管理员...");
     }
     //    错误操作

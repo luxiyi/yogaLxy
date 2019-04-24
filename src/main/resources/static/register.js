@@ -7,14 +7,7 @@ function sendRegEmailCode() {
             "userEmail":$("#userEmail").val(),
         },
         success:function (data) {
-            if (data=="前往邮箱获取密码"){
-                alert(data);
-               window.location.href="./regByEmail.html";
-            }else if(data=="不能为空"){
-                alert(data);
-            }else if(data=="邮箱格式不匹配"){
-                alert(data);
-            }else if(data=="已存在"){
+            if (data=="前往邮箱获取验证码"){
                 alert(data);
             }else {
                 alert(data);
@@ -31,20 +24,12 @@ function regByEmail() {
         data:{
             "userEmail":$("#userEmail").val(),
             "userVerifyCode":$("#userVerifyCode").val(),
-            "userPwd":$("#userPwd").val()
+            "userPwd":$("#userPwd").val(),
         },
         success:function (data) {
             if (data=="注册成功"){
                 alert(data);
                 window.location.href="./index.html";
-            }else if(data=="不能为空"){
-                alert(data);
-            }else if(data=="邮箱格式不匹配"){
-                alert(data);
-            }else if(data=="密码格式不匹配"){
-                alert(data);
-            }else if(data=="注册失败"){
-                alert(data);
             }else {
                 alert(data);
             }
@@ -64,37 +49,64 @@ function loginByEmailAndPwd() {
             if (data=="登录成功"){
                 alert(data);
                 window.location.href="./index.html";
-            }else if(data=="不能为空"){
-                alert(data);
             }else {
                 alert(data);
-                window.location.reload();
             }
         }
     });
 }
-//邮箱找回密码
-function getOldEmailPwd() {
+//邮箱找回密码,发送验证码
+function getCodeByEmail() {
     $.ajax({
-        url:"user/getOldEmailPwd",
+        url:"user/getCodeByEmail",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
         },
         success:function (data) {
-            if (data=="前往邮箱获取密码"){
                 alert(data);
-                window.location.href="./login.html";
-            }else if(data=="不能为空"){
+        }
+    });
+}
+//邮箱找回密码，验证验证码和邮箱
+function getPwdByEmail() {
+    $.ajax({
+        url:"user/getPwdByEmail",
+        type:"post",
+        data:{
+            "userEmail":$("#userEmail").val(),
+            "userVerifyCode":$("#emailCode").val()
+        },
+        success:function (data) {
+            if (data=="请重置密码"){
                 alert(data);
-            }else{
+                window.location.href="./updateUserPwd.html";
+            }else {
                 alert(data);
             }
         }
     });
 }
-
-
+//邮箱找回密码，密码重置，返回登录页面
+function  updateUserPwdByEmail() {
+    $.ajax({
+        url:"user/ updateUserPwdByEmail",
+        type:"post",
+        data:{
+            "userEmail":$("#userEmail").val(),
+            "userPwd":$("#userPwd").val(),
+            "confirmPwd":$("#confirmPwd").val()
+        },
+        success:function (data) {
+            if (data=="重置密码成功"){
+                alert(data);
+                window.location.href="./login.html";
+            }else {
+                alert(data);
+            }
+        }
+    });
+}
 
 
 //发送注册手机密码
@@ -108,10 +120,6 @@ function sendRegPhonePwd() {
         success:function (data) {
             if (data=="请在手机上查收密码"){
                 alert(data);
-            }else if(data=="不能为空"){
-                alert(data)
-            } else if(data=="手机号已存在"){
-                alert(data)
             } else {
                 alert(data);
             }
@@ -120,25 +128,21 @@ function sendRegPhonePwd() {
 }
 //注册手机
 function regByPhone() {
+    alert($("input[name=roleId]:checked").val());
     $.ajax({
         url:"user/regByPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
-            "userPwd":$("#userPwd").val()
+            "userPwd":$("#userPwd").val(),
+            "roleId":$("input[name=roleId]:checked").val()
         },
         success:function (data) {
             if (data=="注册成功"){
                 alert(data);
                 window.location.href="./index.html";
-            }else if(data=="不能为空"){
-                alert(data);
-            }else if(data=="已存在"){
-                alert(data);
-            }else if(data=="手机格式不匹配"){
-                alert(data);
             }else {
-                alert("注册失败");
+                alert(data);
             }
         }
     });
@@ -152,15 +156,7 @@ function sendLoginPhonePwd() {
             "userPhone":$("#userPhone").val(),
         },
         success:function (data) {
-            if (data=="请在手机上查收验证码"){
                 alert(data);
-            }else if(data=="手机格式不匹配"){
-                alert(data);
-            } else if(data=="手机号不存在"){
-                alert(data);
-            } else {
-                alert(data);
-            }
         }
     });
 }
@@ -177,12 +173,6 @@ function loginByPhoneAndCode() {
             if (data=="登录成功"){
                 alert(data);
                 window.location.href="./index.html";
-            }else if(data=="不能为空"){
-                alert(data);
-            }else if(data=="手机格式不匹配"){
-                alert(data);
-            }else if(data=="手机号不存在"){
-                alert(data);
             }else {
                 alert(data);
             }
@@ -190,22 +180,52 @@ function loginByPhoneAndCode() {
     });
 }
 //手机找回密码
-function  getOldPhonePwd() {
+function  getCodeByPhone() {
     $.ajax({
-        url:"user/getOldPhonePwd",
+        url:"user/getCodeByPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
         },
         success:function (data) {
-            if (data=="请在手机上查收密码"){
+                alert(data);
+        }
+    });
+}
+
+//手机找回密码，验证验证码和手机
+function getPwdByPhone() {
+    $.ajax({
+        url:"user/getPwdByPhone",
+        type:"post",
+        data:{
+            "userPhone":$("#userPhone").val(),
+            "userVerifyCode":$("#phoneCode").val()
+        },
+        success:function (data) {
+            if (data=="请重置密码"){
+                alert(data);
+                window.location.href="./updateUserPwd.html";
+            }else {
+                alert(data);
+            }
+        }
+    });
+}
+//手机找回密码，密码重置，返回登录页面
+function  updateUserPwdByPhone() {
+    $.ajax({
+        url:"user/updateUserPwdByPhone",
+        type:"post",
+        data:{
+            "userPwd":$("#userPwdPhone").val(),
+            "confirmPwd":$("#confirmPwdPhone").val()
+        },
+        success:function (data) {
+            if (data=="重置密码成功"){
                 alert(data);
                 window.location.href="./login.html";
-            }else if(data=="不能为空"){
-                alert(data);
-            } else if(data=="手机号不存在"){
-                alert(data);
-            } else {
+            }else {
                 alert(data);
             }
         }

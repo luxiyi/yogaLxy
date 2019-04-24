@@ -6,11 +6,12 @@
     <title>Title</title>
 </head>
 <body>
-邮箱：<input type="email" id="userEmail"><br>
-<button onclick="getOldEmailPwd()">找回密码</button><br>
-手机：<input type="tel" id="userPhone"><br>
-<button onclick="getOldPhonePwd()">找回密码</button><br>
-
+邮箱：<input type="email" id="userEmail"><button onclick="getCodeByEmail()">发送验证码</button><br>
+验证码：<input type="text" id="emailCode"><br>
+<button onclick="getPwdByEmail()">下一步</button><br>
+手机：<input type="tel" id="userPhone"><button onclick="getCodeByPhone()">发送验证码</button><br>
+验证码：<input type="text" id="phoneCode"><br>
+<button onclick="getPwdByPhone()">下一步</button>
 
 </body>
 <script th:src="@{/register.js}" ></script>

@@ -122,10 +122,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean sendRegPhonePwd(User user) {
-
         String userPwd= CodeUtil.userNumber();
         user.setUserPwd(userPwd);
-
         if(!userMapper.saveUser(user).getUserPhone().equals("") && !userMapper.saveUser(user).getUserPwd().equals("")){
             new PhoneUtil().sendPwd(user.getUserPhone(),userPwd);
             return true;
@@ -181,4 +179,5 @@ public class UserServiceImpl implements UserService {
     public User queryUserByPhoneAndCode(String userPhone, String userVerifyCode) {
         return userMapper.queryUserByPhoneAndCode(userPhone,userVerifyCode);
     }
+
 }

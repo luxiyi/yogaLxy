@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <script th:src="@{/jquery2.1.4.min.js}"></script>
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
     <title>Title</title>
 </head>
 <body>
     手机号：<input type="tel" id="userPhone"><button onclick="sendRegPhonePwd()">获取密码</button><br>
     密码：<input type="text" id="userPwd"><br>
-    职业选择：<input name="roleId" type="radio" value="1" checked="checked"/>学生
-                <input name="roleId" type="radio" value="2"/>教练<br>
+    职业选择：<input name="roleName" type="radio" value="学员" checked="checked"/>学生
+                <input name="roleName" type="radio" value="场馆"/>场馆<br>
+                <input name="roleName" type="radio" value="瑜伽师"/>教练<br>
     <button onclick="regByPhone()">注册</button>
     <!--1、$('input:radio:checked').val()；-->
     <!--2、$("input[type='radio']:checked").val();-->
@@ -18,5 +19,5 @@
 
 
 </body>
-<script th:src="@{/register.js}" ></script>
+<script th:src="@{/js/register.js}" ></script>
 </html>

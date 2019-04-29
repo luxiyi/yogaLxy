@@ -9,5 +9,7 @@ import com.woniu.yago.pojo.Role;
  */
 public interface RoleService {
 
-    Role findRoleByRoleId(Integer roleId);
+    Role findByRoleId(Integer roleId);
+
+    Role findByRoleName(String roleName);
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+修改头像：<input id="userHeadimg" type="file" name="userHeadimg" /><br>
+邮箱：<input type="email" id="userEmail"><br>
+手机号：<input type="tel" id="userPhone" ><br>
+身份证：<input type="text" id="idcard"><br>
+真实姓名：<input type="text" id="realName"><br>
+性别：<input name="sex" type="radio" value="男" checked="checked"/>男
+<input name="sex" type="radio" value="女"/>女<br>
+昵称：<input type="text" id="userNickname"><br>
+登录地址：<input><br>
+空闲时间：<input type="date" id="startTime">--<input id="endTime" type="date"><br>
+流派：<input name="coachStyle" type="radio" value="1" checked="checked"/>流瑜伽
+<input name="coachStyle" type="radio" value="2"/>空中瑜伽
+<input name="coachStyle" type="radio" value="3"/>力量瑜伽<br>
+教练类型：<input name="coachType" type="radio" value="0" checked="checked"/>全职教练
+<input name="coachType" type="radio" value="1"/>兼职教练
+<input name="coachType" type="radio" value="2"/>临时教练<br>
+是否接课：<input name="coachStatus" type="radio" value="0" checked="checked"/>是
+<input name="coachStatus" type="radio" value="1"/>否<br>
+是否满课：<input name="fullClass" type="radio" value="0" checked="checked"/>否
+        <input name="fullClass" type="radio" value="1"/>是<br>
+期望薪资：<input id="expectedSalary" type="text"><br>
+认证级别：<input name="authentication" type="radio" value="0" checked="checked"/>未认证
+<input name="authentication" type="radio" value="1"/>场馆认证
+<input name="authentication" type="radio" value="2"/>官方认证<br>
+教练介绍：<input id="coachDetail" type="text"><br>
+
+
+
+<button onclick="updateCoachInfo()">修改信息</button>
+
+
+
+
+</body>
+<script th:src="@{/js/coachInfo.js}" ></script>
+</html>

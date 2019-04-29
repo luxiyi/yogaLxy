@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+
+手机：<input type="tel" id="userPhone"><button onclick="sendBindPhoneCode()">发送验证码</button><br>
+验证码：<input type="text" id="userVerifyCode"><br>
+<button onclick="bindPhone()">绑定手机</button>
+
+</body>
+<script th:src="@{/js/register.js}" ></script>
+</html>

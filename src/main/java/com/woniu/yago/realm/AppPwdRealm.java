@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CustomRealm extends AuthorizingRealm {
+public class AppPwdRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
     @Autowired
@@ -29,24 +29,14 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         System.out.println("开始授权");
-        String userName= principals.getPrimaryPrincipal().toString();
+        User user= (User) principals.getPrimaryPrincipal();
         Set<String> roles=new HashSet<>();
-        Role role=null;
-        User user=null;
-        if (userName.matches(RegexpUtil.RegExp_PHONE)){
-            user=userService.queryUserByPhone(userName);
-
-        }
-        if (userName.matches(RegexpUtil.RegExp_Mail)){
-            user=userService.queryUserByEmail(userName);
-        }
-        if (userName == null || userName.equals("")){
-            return null;
-        }
-        role=roleService.findRoleByRoleId(user.getRoleId());
-        roles.add(role.getRoleName());
-        System.out.println(role);
         SimpleAuthorizationInfo info=new SimpleAuthorizationInfo(roles);
+        if (user == null){
+            return info;
+        }
+        Role role=roleService.findByRoleId(user.getRoleId());
+        roles.add(role.getRoleName());
         return info;
     }
 
@@ -54,13 +44,14 @@ public class CustomRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         System.out.println("开始认证");
         String userName=(String)token.getPrincipal();
-        System.out.println(userName);
         User user=new User();
         SimpleAuthenticationInfo info=new SimpleAuthenticationInfo();
         if (userName.matches(RegexpUtil.RegExp_PHONE)){
             System.out.println("手机");
+            System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
             user=userService.queryUserByPhone(userName);
             info=new SimpleAuthenticationInfo(user,user.getUserPwd(),this.getName());
+
         }
         if (userName.matches(RegexpUtil.RegExp_Mail)){
             System.out.println("邮箱");

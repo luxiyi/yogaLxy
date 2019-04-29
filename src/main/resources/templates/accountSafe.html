@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+
+邮箱：<input id="userEmail" type="text"/><br>
+手机：<input id="userPhone" type="text"/><br>
+<a th:href="@{/modifyUserPwd.html}">设置密码</a>
+<a th:href="@{/safe.html}">安全中心</a>
+
+
+</body>
+<script th:src="@{/js/operate.js}" ></script>
+</html>

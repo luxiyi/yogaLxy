@@ -7,4 +7,6 @@ package com.woniu.yago.constant;
  */
 public class SysConstant {
     public static final String CURRENT_USER = "currentUser";
+    public static final String CURRENT_COACH = "currentCoach";
+    public static final String CURRENT_MESSAGE = "message";
 }

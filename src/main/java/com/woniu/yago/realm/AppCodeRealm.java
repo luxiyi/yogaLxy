@@ -1,26 +1,44 @@
 package com.woniu.yago.realm;
 
-import com.woniu.yago.com.woniu.yago.vo.PhoneToken;
+import com.woniu.yago.vo.PhoneToken;
+import com.woniu.yago.pojo.Role;
 import com.woniu.yago.pojo.User;
+import com.woniu.yago.service.RoleService;
 import com.woniu.yago.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Description: java类作用描述PhoneRealm
  * @Author: lxy
  * @time: 2019/4/23 16:13
  */
-public class PhoneRealm extends AuthorizingRealm {
+public class AppCodeRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        System.out.println("开始授权");
+        String userPhone = principals.getPrimaryPrincipal().toString();
+        Set<String> roles=new HashSet<>();
+        User user=userService.queryUserByPhone(userPhone);
+        SimpleAuthorizationInfo info=new SimpleAuthorizationInfo(roles);
+        if (user==null){
+            return info;
+        }
+        Role role=roleService.findByRoleId(user.getUserId());
+        roles.add(role.getRoleName());
+        return info;
     }
 
     @Override

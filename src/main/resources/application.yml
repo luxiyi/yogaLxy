@@ -2,6 +2,7 @@ server:
   port: 80
   servlet:
     context-path: /
+
 spring:
   mvc:
     date-format: yyyy-MM-dd
@@ -16,6 +17,18 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+        max-active: 100
+        max-wait: 60000
+        min-idle: 20
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        test-on-borrow: false
+        test-on-return: true
+        filters: stat,wall,logback
+        use-global-data-source-stat: true
+        connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   thymeleaf:
     cache: false
     encoding: UTF-8
@@ -28,7 +41,27 @@ spring:
       dialect: org.hibernate.dialect.MySQL55Dialect
   main:
       allow-bean-definition-overriding: true
+  servlet:  #文件上传
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+      #      enabled: false
+  redis:
+    host: 192.168.5.227
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: 1000
+        max-idle: 200
+        min-idle: 50
+    timeout: 10000
 mybatis:
   mapper-locations: classpath:/mapper/*/*.xml
   configuration:
     map-underscore-to-camel-case: true
+pagehelper:
+  helper-dialect: mysql
+  support-methods-arguments: true
+  params: pageNum=currentPage,pageSize=pageSize

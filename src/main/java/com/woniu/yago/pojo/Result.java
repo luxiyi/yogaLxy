@@ -13,7 +13,21 @@ public class Result {
     //描述信息，一般为判定不通过的原因
     private String message;
     //附带的数据，无论是单条还是多条数据，都以集合或数组返回，名称为data
-    private Object object;
+    private Object data;
+
+    public Result(Integer code, String message, Object data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+    public Result(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public Result() {
+    }
 
     public Integer getCode() {
         return code;
@@ -31,22 +45,20 @@ public class Result {
         this.message = message;
     }
 
-    public Result(Integer code, String message, Object object) {
-        this.code = code;
-        this.message = message;
-        this.object = object;
+    public Object getData() {
+        return data;
     }
 
-    public Result(Integer code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    public Result() {
+    public void setData(Object data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
-        return "{" + "code:" + code + ", message:'" + message + '\'' + ", data:" + object + '}';
+        return "Result{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

@@ -1,4 +1,4 @@
-package com.woniu.yago.com.woniu.yago.vo;
+package com.woniu.yago.vo;
 
 import org.apache.shiro.authc.HostAuthenticationToken;
 import org.apache.shiro.authc.RememberMeAuthenticationToken;

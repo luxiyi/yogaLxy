@@ -41,6 +41,8 @@ public class User {
     @Column(name = "user_headimg")
     private String userHeadimg;
     @Column
+    private String sex;
+    @Column
     private Float longitude;
     @Column
     private Float latitude;
@@ -52,17 +54,17 @@ public class User {
     private String realName;
     @Column
     private String idcard;
-    @Column(name = "user_level")
+    @Column(name = "user_level",columnDefinition = "int default 0")
     private Integer userLevel;
-    @Column(name = "user_score")
+    @Column(name = "user_score",columnDefinition = "int default 0")
     private Integer userScore;
-    @Column(name = "user_privacy")
+    @Column(name = "user_privacy",columnDefinition = "int default 0")
     private Integer userPrivacy;
     @Column(nullable=false,name = "active",columnDefinition = "int default 0")
     private Integer active;
     @Column(name = "user_verify_code")
     private String userVerifyCode;
-    @Column(name = "user_flag")
+    @Column(name = "user_flag",columnDefinition = "int default 0")
     private Integer userFlag;
 
 

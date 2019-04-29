@@ -1,8 +1,8 @@
 package com.woniu.yago.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.woniu.yago.realm.CustomRealm;
-import com.woniu.yago.realm.PhoneRealm;
+import com.woniu.yago.realm.AppCodeRealm;
+import com.woniu.yago.realm.AppPwdRealm;
 import org.apache.shiro.authc.AbstractAuthenticator;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -41,19 +41,19 @@ public class ShiroConfig {
         map.put("/regByEmail.html","anon");
         map.put("/regByPhone.html","anon");
         map.put("/updateUserPwd.html","anon");
-        map.put("sendRegEmailCode","anon");
-        map.put("regByEmail","anon");
-        map.put("loginByEmailAndPwd","anon");
-        map.put("getPwdByEmail","anon");
-        map.put("sendRegPhonePwd","anon");
-        map.put("regByPhone","anon");
-        map.put("sendLoginPhonePwd","anon");
-        map.put("loginByPhoneAndCode","anon");
-        map.put("getPwdByPhone","anon");
-        map.put("updateUserPwd","anon");
+        map.put("/sendRegEmailCode","anon");
+        map.put("/regByEmail","anon");
+        map.put("/loginByEmailAndPwd","anon");
+        map.put("/getPwdByEmail","anon");
+        map.put("/sendRegPhonePwd","anon");
+        map.put("/regByPhone","anon");
+        map.put("/sendLoginPhonePwd","anon");
+        map.put("/loginByPhoneAndCode","anon");
+        map.put("/getPwdByPhone","anon");
+        map.put("/updateUserPwd","anon");
         map.put("*.css","anon");
         map.put("*.js","anon");
-        map.put("*","authc");
+        map.put("/*","authc");
         map.put("/logout","logout");
         filterFactoryBean.setFilterChainDefinitionMap(map);
         filterFactoryBean.setLoginUrl("login.html");
@@ -63,11 +63,11 @@ public class ShiroConfig {
         }
     //配置安全管理器 lxy
     @Bean
-    public SecurityManager securityManager1(CustomRealm customRealm,PhoneRealm phoneRealm,AbstractAuthenticator abstractAuthenticator){
+    public SecurityManager securityManager1(AppPwdRealm appPwdRealm, AppCodeRealm appCodeRealm, AbstractAuthenticator abstractAuthenticator){
         DefaultWebSecurityManager webSecurityManager=new DefaultWebSecurityManager();
         List<Realm> realms = new ArrayList<>();
-        realms.add(customRealm);
-        realms.add(phoneRealm);
+        realms.add(appPwdRealm);
+        realms.add(appCodeRealm);
         webSecurityManager.setRealms(realms);
         webSecurityManager.setAuthenticator(abstractAuthenticator);
         return webSecurityManager;
@@ -75,26 +75,26 @@ public class ShiroConfig {
 
     //配置自定义域邮箱登录
     @Bean
-    public CustomRealm customRealm(HashedCredentialsMatcher matcher, MemoryConstrainedCacheManager memoryConstrainedCacheManager){
+    public AppPwdRealm customRealm(HashedCredentialsMatcher matcher, MemoryConstrainedCacheManager memoryConstrainedCacheManager){
         System.out.println("邮箱自定义");
-        CustomRealm realm=new CustomRealm();
+        AppPwdRealm realm=new AppPwdRealm();
         realm.setCredentialsMatcher(matcher);
         realm.setCacheManager(memoryConstrainedCacheManager);
         return realm;
     }
     //配置手机验证码登录
     @Bean
-    public PhoneRealm phoneRealm(MemoryConstrainedCacheManager memoryConstrainedCacheManager){
+    public AppCodeRealm phoneRealm(MemoryConstrainedCacheManager memoryConstrainedCacheManager){
         System.out.println("手机自定义");
-        PhoneRealm phoneRealm = new PhoneRealm();
-        phoneRealm.setCacheManager(memoryConstrainedCacheManager);
-        return phoneRealm;
+        AppCodeRealm appCodeRealm = new AppCodeRealm();
+        appCodeRealm.setCacheManager(memoryConstrainedCacheManager);
+        return appCodeRealm;
     }
     /**
      * 认证器
      */
     @Bean
-    public AbstractAuthenticator abstractAuthenticator(CustomRealm customRealm, PhoneRealm phoneRealm){
+    public AbstractAuthenticator abstractAuthenticator(AppPwdRealm appPwdRealm, AppCodeRealm appCodeRealm){
         // 自定义模块化认证器，用于解决多realm抛出异常问题
         ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
         // 认证策略：AtLeastOneSuccessfulStrategy(默认)，AllSuccessfulStrategy，FirstSuccessfulStrategy
@@ -102,8 +102,8 @@ public class ShiroConfig {
 
         // 加入realms
         List<Realm> realms = new ArrayList<>();
-        realms.add(customRealm);
-        realms.add(phoneRealm);
+        realms.add(appPwdRealm);
+        realms.add(appCodeRealm);
         authenticator.setRealms(realms);
 
         return authenticator;
@@ -121,6 +121,7 @@ public class ShiroConfig {
     //整合thymeleaf
     @Bean
     public ShiroDialect shiroDialect(){
+
         ShiroDialect dialect=new ShiroDialect();
         return dialect;
     }

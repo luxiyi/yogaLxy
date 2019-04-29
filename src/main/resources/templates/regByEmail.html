@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <script th:src="@{/jquery2.1.4.min.js}"></script>
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
     <title>Title</title>
 </head>
 <body>
     邮箱：<input type="email" id="userEmail"><button onclick="sendRegEmailCode()">获取验证码</button><br>
     密码：<input type="password" id="userPwd"> <br>
     验证码：<input type="text" id="userVerifyCode"><br>
-    职业选择：<input name="roleId" type="radio" value="学生" checked="checked"/>学生<br>
+    职业选择：<input name="roleName" type="radio" value="学员" checked="checked"/>学员<br>
     <button onclick="regByEmail()">注册</button>
 
 </body>
-<script th:src="@{/register.js}" ></script>
+<script th:src="@{/js/register.js}" ></script>
 </html>

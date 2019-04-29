@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+
+邮箱：<input id="userEmail" type="text"/><br>
+手机：<input id="userPhone" type="text"/><br>
+旧密码：<input id="userOldPwd" type="text"/><br>
+新密码：<input id="userNewPwd" type="text"/><br>
+确认密码：<input id="confirmPwd" type="text"/><br>
+<button onclick="modifyUserPwd()">完成</button>
+
+</body>
+<script th:src="@{/js/operate.js}" ></script>
+</html>

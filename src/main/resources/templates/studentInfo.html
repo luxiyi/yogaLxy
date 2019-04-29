@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta http-equiv="Content-Type" content="multipart/form-data;charset=utf-8" />-->
+    <script th:src="@{/js/jquery2.1.4.min.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+修改头像：<input  id="userHeadimg" type="file" name="userHeadimg" /><button onclick="uploadHead()">文件上传</button><br>
+邮箱：<input type="email" id="userEmail"><br>
+手机号：<input type="tel" id="userPhone" ><a th:href="@{/bingPhone.html}">绑定手机号</a><br>
+身份证：<input type="text" id="idcard"><br>
+真实姓名：<input type="text" id="realName"><br>
+性别：<input name="sex" type="radio" value="男" checked="checked"/>男
+        <input name="sex" type="radio" value="女"/>女<br>
+昵称：<input type="text" id="userNickname"><br>
+上次登录地址：<input><br>
+<button onclick="updateStudentInfo()">修改信息</button>
+
+
+
+
+
+
+
+
+</body>
+<script th:src="@{/js/studentInfo.js}" ></script>
+</html>

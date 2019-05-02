@@ -1,7 +1,7 @@
 //发送邮箱密码
 function sendRegEmailCode() {
     $.ajax({
-        url:"/user/sendRegEmailCode",
+        url:"/userApp/sendRegEmailCode",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -21,7 +21,7 @@ function sendRegEmailCode() {
 //注册邮箱
 function regByEmail() {
     $.ajax({
-        url:"/user/regByEmail",
+        url:"/userApp/regByEmail",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -44,7 +44,7 @@ function regByEmail() {
 //登录邮箱
 function loginByEmailAndPwd() {
     $.ajax({
-        url:"/user/loginByEmailAndPwd",
+        url:"/userApp/loginByEmailAndPwd",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -65,7 +65,7 @@ function loginByEmailAndPwd() {
 //邮箱找回密码,发送验证码
 function getCodeByEmail() {
     $.ajax({
-        url:"/user/getCodeByEmail",
+        url:"/userApp/getCodeByEmail",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -79,7 +79,7 @@ function getCodeByEmail() {
 //邮箱找回密码，验证验证码和邮箱
 function getPwdByEmail() {
     $.ajax({
-        url:"/user/getPwdByEmail",
+        url:"/userApp/getPwdByEmail",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -99,7 +99,7 @@ function getPwdByEmail() {
 //邮箱找回密码，密码重置，返回登录页面
 function  updateUserPwdByEmail() {
     $.ajax({
-        url:"/user/ updateUserPwdByEmail",
+        url:"/userApp/ updateUserPwdByEmail",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -111,7 +111,7 @@ function  updateUserPwdByEmail() {
             if (data.message=="重置密码成功"){
                 console.log(data);
                 alert(data.message);
-                window.location.href="./login.html";
+                window.location.href="./loginApp.html";
             }else {
                 alert(data.message);
             }
@@ -123,7 +123,7 @@ function  updateUserPwdByEmail() {
 //发送注册手机密码
 function sendRegPhonePwd() {
     $.ajax({
-        url:"/user/sendRegPhonePwd",
+        url:"/userApp/sendRegPhonePwd",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -141,7 +141,7 @@ function sendRegPhonePwd() {
 //注册手机
 function regByPhone() {
     $.ajax({
-        url:"/user/regByPhone",
+        url:"/userApp/regByPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -162,7 +162,7 @@ function regByPhone() {
 //发送登录手机验证码
 function sendLoginPhonePwd() {
     $.ajax({
-        url:"/user/sendLoginPhonePwd",
+        url:"/userApp/sendLoginPhonePwd",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -176,7 +176,7 @@ function sendLoginPhonePwd() {
 //登录手机
 function loginByPhoneAndCode() {
     $.ajax({
-        url:"/user/loginByPhoneAndCode",
+        url:"/userApp/loginByPhoneAndCode",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -196,7 +196,7 @@ function loginByPhoneAndCode() {
 //手机找回密码
 function  getCodeByPhone() {
     $.ajax({
-        url:"/user/getCodeByPhone",
+        url:"/userApp/getCodeByPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -211,7 +211,7 @@ function  getCodeByPhone() {
 //手机找回密码，验证验证码和手机
 function getPwdByPhone() {
     $.ajax({
-        url:"/user/getPwdByPhone",
+        url:"/userApp/getPwdByPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -232,7 +232,7 @@ function getPwdByPhone() {
 //手机找回密码，密码重置，返回登录页面
 function  updateUserPwdByPhone() {
     $.ajax({
-        url:"/user/updateUserPwdByPhone",
+        url:"/userApp/updateUserPwdByPhone",
         type:"post",
         data:{
             "userPwd":$("#userPwdPhone").val(),
@@ -242,7 +242,7 @@ function  updateUserPwdByPhone() {
             if (data.message=="重置密码成功"){
                 console.log(data);
                 alert(data.message);
-                window.location.href="./login.html";
+                window.location.href="./loginApp.html";
             }else {
                 alert(data.message);
             }
@@ -253,7 +253,7 @@ function  updateUserPwdByPhone() {
 //手机绑定，发送验证码
 function  sendBindPhoneCode() {
     $.ajax({
-        url:"/user/sendBindPhoneCode",
+        url:"/userApp/sendBindPhoneCode",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),
@@ -268,7 +268,7 @@ function  sendBindPhoneCode() {
 //手机绑定，验证验证码和手机
 function bindPhone() {
     $.ajax({
-        url:"/user/bindPhone",
+        url:"/userApp/bindPhone",
         type:"post",
         data:{
             "userPhone":$("#userPhone").val(),

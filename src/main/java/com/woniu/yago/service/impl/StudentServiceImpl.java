@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Repository
 public class StudentServiceImpl implements StudentService {
-//    @Autowired
-//    private StudentMapper studentMapper;
     @Autowired
     private StudentRepository studentRepository;
 

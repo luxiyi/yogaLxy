@@ -22,8 +22,6 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Repository
 public class UserServiceImpl implements UserService {
-//    @Autowired
-//    private UserMapper userMapper;
     @Autowired
     private UserRepository userRepository;
     @Autowired

@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Repository
 public class VenueServiceImpl implements VenueService {
-//    @Autowired
-//    private VenueMapper venueMapper;
     @Autowired
     private VenueRepository venueRepository;
 

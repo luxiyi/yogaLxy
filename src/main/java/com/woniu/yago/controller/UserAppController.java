@@ -43,8 +43,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Transactional
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/userApp")
+public class UserAppController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -125,12 +125,12 @@ public class UserController {
         if (role == null){
             return ResultUtil.errorOperation("职业选择错误，请重新选择职业");
         }
-        if(!stringRedisTemplate.hasKey(userEmail)){
-            return ResultUtil.errorOperation("验证码过期，请重新发送验证码");
-        }
-        if (!stringRedisTemplate.opsForValue().get(userEmail).equals(userVerifyCode)){
-            return ResultUtil.errorOperation("验证码错误，请重新输入");
-        }
+//        if(!stringRedisTemplate.hasKey(userEmail)){
+//            return ResultUtil.errorOperation("验证码过期，请重新发送验证码");
+//        }
+//        if (!stringRedisTemplate.opsForValue().get(userEmail).equals(userVerifyCode)){
+//            return ResultUtil.errorOperation("验证码错误，请重新输入");
+//        }
         user.setUserVerifyCode("");
         user.setRoleId(role.getRoleId());
         user.setSalt(CodeUtil.userNumber());
@@ -162,14 +162,22 @@ public class UserController {
     @RequestMapping(value = "/loginByEmailAndPwd")
     @ResponseBody
     public Result loginByEmailAndPwd(String userEmail, String userPwd, User user, HttpSession session){
+        user=userService.queryUserByEmail(userEmail);
+        if (user==null){
+            return ResultUtil.errorOperation("该邮箱号没有被注册，请先注册再登录");
+        }
+        if (user.getRoleId()!=1 && user.getRoleId()!=2){
+                return ResultUtil.errorOperation("该用户因权限无法登录App端，请重新输入");
+        }
         Subject subject= SecurityUtils.getSubject();
         if (!subject.isAuthenticated()){
             UsernamePasswordToken token = new UsernamePasswordToken(userEmail,userPwd);
+
             try {
                 subject.login(token);
                 //认证成功
                 System.out.println("认证成功!");
-                user=userService.queryUserByEmail(userEmail);
+
                 session.setAttribute(SysConstant.CURRENT_USER, user);
                 Result result=ResultUtil.actionSuccess("登录成功",user);
                 return ResultUtil.actionSuccess("登录成功",user);
@@ -321,9 +329,15 @@ public class UserController {
     @RequestMapping("/regByPhone")
     @ResponseBody
     public Result regByPhone(String userPhone, String userPwd, User user, String roleName, HttpSession session,
-                             Student student, Coach coach,Venue venue){
-        if (userPwd.equals("") || userPhone.equals("") || roleName.equals("")){
-            return ResultUtil.errorOperation("手机号、密码、职业不能为空");
+                             Student student, Coach coach){
+        if (userPwd.equals("")){
+            return ResultUtil.errorOperation("密码不能为空");
+        }
+        if (userPhone.equals("")){
+            return ResultUtil.errorOperation("手机号不能为空");
+        }
+        if (roleName.equals("")){
+            return ResultUtil.errorOperation("职业不能为空");
         }
         if(!userPhone.matches(RegexpUtil.RegExp_PHONE)) {
             return ResultUtil.errorOperation("手机格式不匹配");
@@ -332,12 +346,12 @@ public class UserController {
         if (exist!=null){
             return ResultUtil.errorOperation("该手机号已经被绑定，请重新输入");
         }
-        if (!stringRedisTemplate.hasKey(userPhone)){
-            return ResultUtil.errorOperation("密码已过期，请重新获取密码");
-        }
-        if(!stringRedisTemplate.opsForValue().get(userPhone).equals(userPwd)){
-            return ResultUtil.errorOperation("密码错误，请重新输入");
-        }
+//        if (!stringRedisTemplate.hasKey(userPhone)){
+//            return ResultUtil.errorOperation("密码已过期，请重新获取密码");
+//        }
+//        if(!stringRedisTemplate.opsForValue().get(userPhone).equals(userPwd)){
+//            return ResultUtil.errorOperation("密码错误，请重新输入");
+//        }
         user.setSalt(CodeUtil.userNumber());
         SimpleHash userHashPwd = new SimpleHash("MD5",userPwd,user.getSalt(),2);
         user.setUserPwd(userHashPwd.toString());
@@ -358,17 +372,14 @@ public class UserController {
             studentService.saveStudent(student);
         }
         if (user.getRoleId()==2){
+            System.out.println("Ssfsdsdsds"+coach);
             coach.setUserId(user.getUserId());
             coachService.saveCoach(coach);
         }
-        if (user.getRoleId()==3){
-            venue.setUserId(user.getUserId());
-            venueService.saveVenue(venue);
-        }
+
 
         Subject subject=SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(userPhone,userPwd);
-        System.out.println(token+"ssssssssssssssssssssssssss");
         subject.login(token);
         session.setAttribute(SysConstant.CURRENT_USER,user);
         return ResultUtil.actionSuccess("注册成功",user);
@@ -421,9 +432,12 @@ public class UserController {
     @RequestMapping("/loginByPhoneAndCode")
     @ResponseBody
     public Result loginByPhoneAndCode(String userPhone,String userVerifyCode,User user,HttpSession session){
-        if(userPhone.equals("")||userVerifyCode.equals("")){
-            return ResultUtil.errorOperation("手机号或者验证码不能为空");
+        if(userPhone.equals("")){
+            return ResultUtil.errorOperation("手机号不能为空");
         }
+//        if(userVerifyCode.equals("")){
+//            return ResultUtil.errorOperation("验证码不能为空");
+//        }
         if (!userPhone.matches(RegexpUtil.RegExp_PHONE)){
             return ResultUtil.errorOperation("手机格式不匹配");
         }
@@ -432,12 +446,16 @@ public class UserController {
         if (user==null){
             return ResultUtil.errorOperation("该手机号没有注册，请先注册再登录");
         }
-        if (!stringRedisTemplate.hasKey(userPhone)){
-            return ResultUtil.errorOperation("验证码已过期，请重新点击获取");
+        if (user.getRoleId()!=1 && user.getRoleId()!=2){
+            System.out.println(user.getRoleId());
+            return ResultUtil.errorOperation("该用户因权限无法登录App端，请重新输入");
         }
-        if (!stringRedisTemplate.opsForValue().get(userPhone).equals(userVerifyCode)){
-            return ResultUtil.errorOperation("验证码错误，请重新输入");
-        }
+//        if (!stringRedisTemplate.hasKey(userPhone)){
+//            return ResultUtil.errorOperation("验证码已过期，请重新点击获取");
+//        }
+//        if (!stringRedisTemplate.opsForValue().get(userPhone).equals(userVerifyCode)){
+//            return ResultUtil.errorOperation("验证码错误，请重新输入");
+//        }
         PhoneToken token = new PhoneToken(userPhone);
         Subject subject = SecurityUtils.getSubject();
         subject.login(token);
@@ -544,7 +562,7 @@ public class UserController {
         System.out.println("注销");
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return "redirect:../login.html";
+        return "redirect:../loginApp.html";
     }
 
 //-----------------------学生信息------------------------
@@ -680,6 +698,9 @@ public Result updateStudentInfo(User user,HttpSession session){
             userReal.setUserPrivacy(user.getUserPrivacy());
             userReal.setRealName(user.getRealName());
             userReal.setSex(user.getSex());
+            userReal.setUserQq(user.getUserQq());
+            userReal.setUserWechat(user.getUserWechat());
+            userReal.setUserLocation(user.getUserLocation());
             return ResultUtil.actionSuccess("成功完善信息",userReal);
     }
     /**
@@ -725,17 +746,20 @@ public Result updateStudentInfo(User user,HttpSession session){
     @RequestMapping("/updateCoachInfo")
     @ResponseBody
     public Map<String,Object> updateCoachInfo(User user,HttpSession session,Coach coach,String info){
+        User userSession= (User) session.getAttribute(SysConstant.CURRENT_USER);
         Map<String,Object> result=new HashMap<>();
-        if (!user.getUserEmail().matches(RegexpUtil.RegExp_Mail)){
-            info="邮箱格式不匹配，请重新输入";
-            result.put(SysConstant.CURRENT_MESSAGE,info);
-            return result;
-        }
-        User exit=userService.queryUserByEmail(user.getUserEmail());
-        if (exit!=null){
-            info="该邮箱已经被绑定，请重新输入";
-            result.put(SysConstant.CURRENT_MESSAGE,info);
-            return result;
+        if (!user.getUserEmail().equals("")){
+            if (!user.getUserEmail().matches(RegexpUtil.RegExp_Mail)){
+                info="邮箱格式不匹配，请重新输入";
+                result.put(SysConstant.CURRENT_MESSAGE,info);
+                return result;
+            }
+            User exit=userService.queryUserByEmail(user.getUserEmail());
+            if (exit!=userService.queryUserByEmail(userSession.getUserEmail())&& exit!=null){
+                info="该邮箱已经被绑定，请重新输入";
+                result.put(SysConstant.CURRENT_MESSAGE,info);
+                return result;
+            }
         }
         if (user.getRealName().equals("") || user.getIdcard().equals("")){
             info="请完善身份证信息和真实名字";
@@ -760,11 +784,14 @@ public Result updateStudentInfo(User user,HttpSession session){
         userReal.setUserPrivacy(user.getUserPrivacy());
         userReal.setRealName(user.getRealName());
         userReal.setSex(user.getSex());
+        userReal.setUserQq(user.getUserQq());
+        userReal.setUserWechat(user.getUserWechat());
+        userReal.setUserLocation(user.getUserLocation());
         Coach coachReal=coachService.findCoachByUserId(userReal.getUserId());
         if (coachReal==null){
-            System.out.println();
-            coachReal.setUserId(userReal.getUserId());
-            coachService.saveCoach(coachReal);
+            info="系统错误，请联系管理员";
+            result.put(SysConstant.CURRENT_MESSAGE,info);
+            return result;
         }
 
         coachReal.setCoachStyle(coach.getCoachStyle());

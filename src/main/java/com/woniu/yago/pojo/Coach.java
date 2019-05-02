@@ -52,6 +52,7 @@ public class Coach {
     private Integer badComment;
 
     private Integer commonComment;
+
     @Column(nullable = false,name = "coach_flag",columnDefinition ="int default 0")
     private Integer coachFlag;
 }

@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Repository
 public class CoachServiceImpl implements CoachService {
-//    @Autowired
-//    private CoachMapper coachMapper;
     @Autowired
     private CoachRepository coachRepository;
 

@@ -48,7 +48,6 @@ public class AppPwdRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo info=new SimpleAuthenticationInfo();
         if (userName.matches(RegexpUtil.RegExp_PHONE)){
             System.out.println("手机");
-            System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
             user=userService.queryUserByPhone(userName);
             info=new SimpleAuthenticationInfo(user,user.getUserPwd(),this.getName());
 

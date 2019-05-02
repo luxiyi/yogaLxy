@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-主页  <a href="/user/logout"> <span> 注销</span></a><br>
+主页  <a href="/userApp/logout"> <span> 注销</span></a><br>
 <shiro:hasRole name="学员"><a th:href="@{/studentInfo.html}">学员个人信息</a> </shiro:hasRole>
 <shiro:hasRole name="瑜伽师"><a th:href="@{/coachInfo.html}">教练个人信息</a> </shiro:hasRole>
 <a th:href="@{/privacy.html}">隐私</a>

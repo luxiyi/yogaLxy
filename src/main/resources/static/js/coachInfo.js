@@ -1,7 +1,7 @@
 //展现教练信息
 function showCoachInfo() {
     $.ajax({
-        url:"/user/showCoachInfo",
+        url:"/userApp/showCoachInfo",
         type:"post",
         success:function (data) {
             console.log(data);
@@ -28,7 +28,7 @@ showCoachInfo();
 //修改教练个人信息
 function  updateCoachInfo() {
     $.ajax({
-        url:"/user/updateCoachInfo",
+        url:"/userApp/updateCoachInfo",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),

@@ -1,7 +1,7 @@
 //展现隐私功能
 function  showPrivacy() {
     $.ajax({
-        url:"/user/showPrivacy",
+        url:"/userApp/showPrivacy",
         type:"post",
         success:function (data) {
             console.log(data);
@@ -13,7 +13,7 @@ showPrivacy();
 //修改隐私
 function  updatePrivacy() {
     $.ajax({
-        url:"/user/updatePrivacy",
+        url:"/userApp/updatePrivacy",
         type:"post",
         data:{
             "userPrivacy":$("input[name=userPrivacy]:checked").val(),
@@ -34,7 +34,7 @@ function  updatePrivacy() {
 //展现账号
 function  showAccount() {
     $.ajax({
-        url:"/user/showAccount",
+        url:"/userApp/showAccount",
         type:"post",
         success:function (data) {
             $("#userEmail").val(data.data.userEmail);
@@ -47,7 +47,7 @@ showAccount();
 //展现设置密码
 function  showModifyUserPwd() {
     $.ajax({
-        url:"/user/showModifyUserPwd",
+        url:"/userApp/showModifyUserPwd",
         type:"post",
         success:function (data) {
             $("#userEmail").val(data.data.userEmail);
@@ -59,7 +59,7 @@ showModifyUserPwd();
 //修改隐私
 function  modifyUserPwd() {
     $.ajax({
-        url:"/user/modifyUserPwd",
+        url:"/userApp/modifyUserPwd",
         type:"post",
         data:{
             "userOldPwd":$("#userOldPwd").val(),

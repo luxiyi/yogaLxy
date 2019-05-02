@@ -2,7 +2,7 @@
 
 function  showStudentInfo() {
     $.ajax({
-        url:"/user/showStudentInfo",
+        url:"/userApp/showStudentInfo",
         type:"post",
         success:function (data) {
             console.log(data);
@@ -21,7 +21,7 @@ showStudentInfo();
 //修改学生个人信息
 function  updateStudentInfo() {
     $.ajax({
-        url:"/user/updateStudentInfo",
+        url:"/userApp/updateStudentInfo",
         type:"post",
         data:{
             "userEmail":$("#userEmail").val(),
@@ -50,7 +50,7 @@ function  uploadHead() {
     var formData = new FormData();
     formData.append("userHeadimg", $('#userHeadimg')[0].files[0].name);
     $.ajax({
-        url:"/user/uploadHead",
+        url:"/userApp/uploadHead",
         type:"post",
         data:formData,
         contentType : false,

@@ -6,11 +6,14 @@
     <title>Title</title>
 </head>
 <body>
-
-手机：<input type="tel" id="userPhone"><button onclick="sendBindPhoneCode()">发送验证码</button><br>
+手机号：<input type="tel" id="userPhone"><button onclick="sendRegPhoneCode()">获取验证码</button><br>
+密码：<input type="text" id="userPwd"><br>
 验证码：<input type="text" id="userVerifyCode"><br>
-<button onclick="bindPhone()">绑定手机</button>
+<button onclick="regByPhone()">注册</button>
+
+
+
 
 </body>
-<script th:src="@{/js/registerApp.js}" ></script>
+<script th:src="@{/js/registerPc.js}" ></script>
 </html>
